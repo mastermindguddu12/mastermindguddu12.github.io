@@ -1,87 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My App</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAJOgpk5VdGJ5K320u8nONWheRQDuHsXBc",
-            authDomain: "database-2e104.firebaseapp.com",
-            databaseURL: "https://database-2e104-default-rtdb.firebaseio.com",
-            projectId: "database-2e104",
-            storageBucket: "database-2e104.appspot.com",
-            messagingSenderId: "412139329143",
-            appId: "1:412139329143:web:de89d2fdd4a2668b5a5872",
-            measurementId: "G-QN3NZJ4R6T"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Fetch data from Firebase
-        get(child(ref(database), 'links')).then((snapshot) => {
-            if (snapshot.exists()) {
-                const links = snapshot.val();
-                const container = document.querySelector('.image-boxes');
-
-                for (const key in links) {
-                    const linkData = links[key];
-                    const linkElement = document.createElement('a');
-                    linkElement.href = linkData.url;
-                    linkElement.target = '_blank';
-                    linkElement.className = 'image-box';
-
-                    const imgElement = document.createElement('img');
-                    imgElement.src = linkData.image;
-                    imgElement.alt = key;
-
-                    const spanElement = document.createElement('span');
-                    spanElement.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-
-                    linkElement.appendChild(imgElement);
-                    linkElement.appendChild(spanElement);
-                    container.appendChild(linkElement);
-                }
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error("Error fetching data:", error);
-        });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Links</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>My App</h1>
-        <p>Your one-stop solution for everything!</p>
-    </header>
-    
-    <main class="container">
-        <h2>Explore Links</h2>
-        <div class="image-boxes"></div>
-    </main>
-    
-    <footer>
-        <p>&copy; 2024 My App. All rights reserved.</p>
-    </footer>
+  <header>
+    <h1>🏠 Home</h1>
+    <p>Your gateway to useful resources</p>
+  </header>
+
+  <div class="image-boxes">
+    <!-- JavaScript will dynamically add the boxes here -->
+  </div>
+
+  <footer>
+    <div class="footer-widgets">
+      <div class="widget">
+        <h3>About Us</h3>
+        <p>We provide easy access to useful links.</p>
+      </div>
+      <div class="widget">
+        <h3>Contact</h3>
+        <p>Email: example@example.com</p>
+      </div>
+      <div class="widget">
+        <h3>Follow Us</h3>
+        <p>Instagram: <a href="https://www.instagram.com/guddu_singhania_official" target="_blank">@guddu_singhania_official</a></p>
+      </div>
+    </div>
+    <p>&copy; 2024 My Links. All Rights Reserved.</p>
+  </footer>
+
+  <script type="module">
+    // Firebase configuration (add your Firebase setup here)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJOgpk5VdGJ5K320u8nONWheRQDuHsXBc",
+      authDomain: "database-2e104.firebaseapp.com",
+      databaseURL: "https://database-2e104-default-rtdb.firebaseio.com",
+      projectId: "database-2e104",
+      storageBucket: "database-2e104.appspot.com",
+      messagingSenderId: "412139329143",
+      appId: "1:412139329143:web:de89d2fdd4a2668b5a5872",
+      measurementId: "G-QN3NZJ4R6T"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    // Fetch data from Firebase
+    const dbRef = ref(database);
+    get(child(dbRef, 'Links')).then((snapshot) => {
+      if (snapshot.exists()) {
+        const links = snapshot.val();
+        const container = document.querySelector('.image-boxes');
+
+        // Loop through the Firebase data
+        for (const key in links) {
+          const linkData = links[key];
+
+          // Create link box
+          const linkElement = document.createElement('a');
+          linkElement.href = linkData.Url;
+          linkElement.target = '_blank';
+          linkElement.className = 'image-box';
+
+          // Create image element
+          const imgElement = document.createElement('img');
+          imgElement.src = linkData.Image;
+          imgElement.alt = key;
+
+          // Create caption
+          const spanElement = document.createElement('span');
+          spanElement.textContent = key;
+
+          // Append image and caption to link element
+          linkElement.appendChild(imgElement);
+          linkElement.appendChild(spanElement);
+
+          // Append link element to container
+          container.appendChild(linkElement);
+        }
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
